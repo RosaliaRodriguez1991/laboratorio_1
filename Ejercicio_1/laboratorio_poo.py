@@ -4,7 +4,7 @@ Objetivo: Desarrollar un sistema para manejar productos en un inventario.
 
 Requisitos:
 
-Crear una clase base Producto con atributos como nombre, precio, cantidad en stock, etc.
+Crear una clase base Producto con atributos como codigo, nombre, precio, cantidad en stock, etc.
 Definir al menos 2 clases derivadas para diferentes categorías de productos (por ejemplo, ProductoElectronico, ProductoAlimenticio) con atributos y métodos específicos.
 Implementar operaciones CRUD para gestionar productos del inventario.
 Manejar errores con bloques try-except para validar entradas y gestionar excepciones.
@@ -33,7 +33,7 @@ class Producto:
         return self.__precio
     
     @property
-    def precio(self):
+    def cantidad(self):
         return self.__cantidad
 
     def validar_codigo(self,codigo):
@@ -68,6 +68,10 @@ class ProductoElectronico(Producto):
     def garantia(self):
         return self.__garantia
     
+    @garantia.setter
+    def garantia(self, valor):
+        self.__garantia = valor
+    
     def to_dict(self):
         data = super().to_dict()
         data["garantia"] = self.garantia
@@ -80,13 +84,17 @@ class ProductoElectronico(Producto):
 class ProductoAlimenticio(Producto):
     def __init__(self, codigo, nombre, precio, cantidad, fecha_expiracion):
         super().__init__(codigo, nombre, precio, cantidad)
-        self.fecha_expiracion = fecha_expiracion
+        self.__fecha_expiracion = fecha_expiracion
 
    
     
     @property
     def fecha_expiracion(self):
         return self.__fecha_expiracion
+    
+    @fecha_expiracion.setter
+    def fecha_expiracion(self, valor):
+        self.__fecha_expiracion = valor
     
     def to_dict(self):
         data = super().to_dict()
@@ -123,7 +131,7 @@ class Inventario:
 
     def agregar_producto(self, producto):
         try:
-            datos = self.agregar_producto()
+            datos = self.leer_datos()
             codigo = producto.codigo
             if not str(codigo) in datos.keys():
                 datos[codigo] = producto.to_dict()
@@ -134,11 +142,11 @@ class Inventario:
         except Exception as error:
             print(f'Error inesperadoal crear producto: {error}')
 
-    def actualizar_producto(self, codigo, nombre, nuevo_producto):
+    def actualizar_producto(self, codigo, nuevos_datos):
         try:
             datos = self.leer_datos()
             if str(codigo) in datos.keys():
-                datos[codigo]['nuevo_producto'] = nuevo_producto
+                datos[str (codigo)].update(nuevos_datos)
                 self.guardar_datos(datos)
                 print(f'Producto actualizado Código:{codigo}')
             else:
@@ -146,16 +154,17 @@ class Inventario:
         except Exception as e:
             print(f'Error al actualizar el producto: {e}')
 
-    def eliminar_producto(self, nombre):
-        self.productos = [p for p in self.productos if p.nombre != nombre]
-        self.guardar_datos()
+    def eliminar_producto(self, codigo):
+        try:
+            datos = self.leer_datos()
+            if str(codigo) in datos.keys():
+                del datos[str(codigo)]
+                self.guardar_datos(datos)
+                print(f'Producto con código {codigo} eliminado.')
+            else:
+                print(f'No se encontró producto con el código: {codigo}')
+        except Exception as e:
+            print(f'Error al eliminar el producto: {e}')
 
-    def actualizar_producto(self, nombre, nuevo_producto):
-        for idx, producto in enumerate(self.productos):
-            if producto.nombre == nombre:
-                self.productos[idx] = nuevo_producto
-                self.guardar_datos()
-                return
-        print("Producto no encontrado.")
-
+  
     

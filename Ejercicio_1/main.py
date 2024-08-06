@@ -11,7 +11,7 @@ from laboratorio_poo import (
 
 
 def limpiar_pantalla():
-    ''' Limpiar la pantalla según el sistema operativo'''
+    
     if platform.system() == 'Windows':
         os.system('cls')
     else:
@@ -37,7 +37,7 @@ def agregar_producto(inventario):
             garantia = int(input('Ingrese garantía (en años): '))
             producto = ProductoElectronico(codigo, nombre, precio, cantidad, garantia)
         elif tipo_codigo == '2':
-            fecha_expiracion = input('Ingrese fecha de expiración (DD-MM-AAAA): ')
+            fecha_expiracion = input('Ingrese fecha de expiración (aaaa-mm-dd)): ')
             producto = ProductoAlimenticio(codigo, nombre, precio, cantidad, fecha_expiracion)
         else:
             print('Opción inválida')

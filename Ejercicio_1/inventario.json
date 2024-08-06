@@ -1,0 +1,16 @@
+{
+    "1.0": {
+        "codigo": 1.0,
+        "nombre": "Computadora",
+        "precio": 50000.0,
+        "cantidad": 2,
+        "garantia": 2
+    },
+    "2.0": {
+        "codigo": 2.0,
+        "nombre": "Fideos",
+        "precio": 1052.0,
+        "cantidad": 2,
+        "fecha_expiracion": "2026-02-03"
+    }
+}
